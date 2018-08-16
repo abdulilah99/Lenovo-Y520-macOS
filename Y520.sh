@@ -72,8 +72,11 @@ case "$1" in
         $0 --update-kernelcache
     ;;
     --install-essential-kexts)
-    	macos-tools/unarchive_file.sh -d $kexts_dir
-        macos-tools/install_kext.sh -i $(findKext FakeSMC.kext) $(findKext RealtekRTL8111.kext) $(findKext FakePCIID.kext) $(findKext FakePCIID_Broadcom_WiFi.kext) $(findKext USBInjectAll.kext) $(findKext ACPIBatteryManager.kext) $(findKext VoodooPS2Controller.kext)
+        macos-tools/unarchive_file.sh -d $kexts_dir
+        EFI=$(macos-tools/mount_efi.sh)
+        kext_dest=$EFI/EFI/CLOVER/kexts/Other
+        rm -Rf $kext_dest/*.kext
+        macos-tools/install_kext.sh -s $kext_dest $(findKext FakeSMC.kext) $(findKext RealtekRTL8111.kext) $(findKext FakePCIID.kext) $(findKext FakePCIID_Broadcom_WiFi.kext) $(findKext USBInjectAll.kext) $(findKext ACPIBatteryManager.kext) $(findKext VoodooPS2Controller.kext)
     ;;
     --install-hdainjector)
         macos-tools/create_hdainjector.sh -c $hda_codec -r $hda_resources -o $local_kexts_dir
